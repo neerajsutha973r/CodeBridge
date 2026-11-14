@@ -1,0 +1,28 @@
+
+{
+    "manifest_version": 3,
+    "name": "CodeBridge",
+    "version": "1.0.0",
+    "description": "Connect ChatGPT conversations to your local coding project.",
+    "permissions": [
+      "storage"
+    ],
+    "host_permissions": [
+      "http://127.0.0.1:8765/*",
+      "https://chatgpt.com/*"
+    ],
+    "content_scripts": [
+      {
+        "matches": [
+          "https://chatgpt.com/*"
+        ],
+        "js": [
+          "content.js"
+        ],
+        "run_at": "document_idle"
+      }
+    ],
+    "background": {
+      "service_worker": "background.js"
+    }
+  }
