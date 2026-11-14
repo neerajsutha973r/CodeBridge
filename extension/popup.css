@@ -1,0 +1,10 @@
+body {
+  width: 280px;
+  margin: 0;
+  padding: 16px;
+  font: 14px system-ui, sans-serif;
+}
+
+h1 { margin: 0 0 8px; font-size: 18px; }
+select, button { box-sizing: border-box; width: 100%; margin-top: 8px; padding: 8px; }
+#status { color: #555; margin: 0; }

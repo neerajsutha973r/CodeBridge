@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "CodeBridge",
+  "version": "1.0.0",
+  "description": "Insert files from a local project into ChatGPT.",
+  "permissions": ["activeTab", "clipboardWrite"],
+  "host_permissions": ["http://127.0.0.1:8765/*"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*", "https://chat.openai.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
