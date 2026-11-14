@@ -4,6 +4,7 @@
 import argparse
 import json
 import mimetypes
+import re
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -15,21 +16,25 @@ MAX_FILES = 2000
 class CodeBridgeHandler(BaseHTTPRequestHandler):
     server_version = "CodeBridge/1.0"
 
+    def _extension_origin(self):
+        origin = self.headers.get("Origin", "")
+        return origin if re.fullmatch(r"chrome-extension://[a-p]{32}", origin) else None
+
     def _send_json(self, status, payload):
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
-        origin = self.headers.get("Origin", "")
-        if origin.startswith("chrome-extension://"):
+        origin = self._extension_origin()
+        if origin:
             self.send_header("Access-Control-Allow-Origin", origin)
         self.end_headers()
         self.wfile.write(body)
 
     def do_OPTIONS(self):
         self.send_response(204)
-        origin = self.headers.get("Origin", "")
-        if origin.startswith("chrome-extension://"):
+        origin = self._extension_origin()
+        if origin:
             self.send_header("Access-Control-Allow-Origin", origin)
         self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
